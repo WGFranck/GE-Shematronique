@@ -1,10 +1,10 @@
 # GE-Shematronique
 Projet final de l'option ISN
 
-##Utilisation
+## Utilisation
 
-##Description du choix du projet
+## Description du choix du projet
 On a fait ça parce que c'est rigolo.
 
-##Crédit
+## Crédit
 Yaniss et Franck
