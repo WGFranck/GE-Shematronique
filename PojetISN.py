@@ -20,6 +20,8 @@
 
 # Exo que des portes and et or
 
+#windowMode a modifier
+
 import sys, math
 from PyQt5 import QtGui, QtWidgets
 from PyQt5.QtGui import QPainter
@@ -538,11 +540,14 @@ def main() :
     def createLine(x1, y1, x2, y2):
         nonlocal clickPos, coefElement, userRotation
         
-        newX1 = clickPos.x() + x1*round(math.cos(userRotation))*coefElement - y1*round(math.sin(userRotation))*coefElement
-        newY1 = clickPos.y() + x1*round(math.sin(userRotation))*coefElement + y1*round(math.cos(userRotation))*coefElement
+        cosPhi = round(math.cos(userRotation))
+        sinPhi = round(math.sin(userRotation))
         
-        newX2 = clickPos.x() + x2*round(math.cos(userRotation))*coefElement - y2*round(math.sin(userRotation))*coefElement
-        newY2 = clickPos.y() + x2*round(math.sin(userRotation))*coefElement + y2*round(math.cos(userRotation))*coefElement
+        newX1 = clickPos.x() + x1*cosPhi*coefElement - y1*sinPhi*coefElement
+        newY1 = clickPos.y() + x1*sinPhi*coefElement + y1*cosPhi*coefElement
+        
+        newX2 = clickPos.x() + x2*cosPhi*coefElement - y2*sinPhi*coefElement
+        newY2 = clickPos.y() + x2*sinPhi*coefElement + y2*cosPhi*coefElement
         
         return QLine(newX1, newY1, newX2, newY2)
     
@@ -556,11 +561,15 @@ def main() :
     def createEllipse(x, y, largeur, hauteur): #faut faire la rotation sur le cercle en lui même donc la c'est faux
         nonlocal clickPos, coefElement, userRotation
         
-        newX1 = clickPos.x() + (x-largeur/2)*round(math.cos(userRotation))*coefElement - (y-hauteur/2)*round(math.sin(userRotation))*coefElement
-        newY1 = clickPos.y() + (x-largeur/2)*round(math.sin(userRotation))*coefElement + (y-hauteur/2)*round(math.cos(userRotation))*coefElement
+        cosPhi = round(math.cos(userRotation))
+        sinPhi = round(math.sin(userRotation))
 
-        newX2 = largeur*round(math.cos(userRotation))*coefElement - hauteur*round(math.sin(userRotation))*coefElement
-        newY2 = largeur*round(math.sin(userRotation))*coefElement + hauteur*round(math.cos(userRotation))*coefElement
+        
+        newX1 = clickPos.x() + (x-largeur/2)*cosPhi*coefElement - (y-hauteur/2)*sinPhi*coefElement
+        newY1 = clickPos.y() + (x-largeur/2)*sinPhi*coefElement + (y-hauteur/2)*cosPhi*coefElement
+
+        newX2 = largeur*cosPhi*coefElement - hauteur*sinPhi*coefElement
+        newY2 = largeur*sinPhi*coefElement + hauteur*cosPhi*coefElement
 
         return QRect(newX1, newY1, newX2, newY2)
 #-----------------------------------------------------------           
@@ -682,6 +691,7 @@ def main() :
         if state == 0 :
             mainWindow.close()
             logoHomeMenu.show()
+            
             for n in range(len(editorButton)):
                 editorButton[n].close()
 
@@ -692,6 +702,7 @@ def main() :
         else :
             mainWindow.close()
             logoHomeMenu.close()
+            
             for n in range(len(homeButton)) :
                 homeButton[n].close()
 
@@ -703,12 +714,12 @@ def main() :
             
             editorButton[2] = createButton(10, (H*8/9), (L/4)-20, (H/8)-20, "Tout suppimer", mainWindow, clearAll)
             
-            editorButton[3] = createButton((L*3/4)+10, (H*7/9), (L/4)-20, (H/8)-20, "Retour", mainWindow, returnHomeMenu)
+            editorButton[3] = createButton((L*3/4)+10, (H*8/9), (L/4)-20, (H/8)-20, "Retour", mainWindow, returnHomeMenu)
             
             editorButton[4] = createButton((L*8/12)-10, (H*7/9), (L/8)-20, (H/8)-20, "cadriage", mainWindow,  changeCadriageMode) 
             editorButton[4].setCheckable(True)
             
-            editorButton[5] = createButton((L*3/4)+10, (H*8/9), (L/4)-20, (H/8)-20, "Rotation", mainWindow, addRotation)
+            editorButton[5] = createButton((L*3/4)+10, (H*7/9), (L/4)-20, (H/8)-20, "Rotation", mainWindow, addRotation)
  
             editorButton[6] = createButton((L*8/12)-10, (H*8/9), (L/8)-20, (H/8)-20, "All Position", mainWindow, changeCursorLock)
             editorButton[6].setCheckable(True)
