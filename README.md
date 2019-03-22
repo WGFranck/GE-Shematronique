@@ -2,9 +2,7 @@
 Projet final de l'option ISN
 
 ## Utilisation et Description
-
-## Pourquoi ce projet
-On a fait ça parce que c'est rigolo.
+Ce logiciel a pour objectif de proposer un interface graphique sur lequel on peut dessiner un schéma électrique ou logique.
 
 ## Crédit
 Yaniss et Franck
