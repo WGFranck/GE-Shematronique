@@ -18,9 +18,7 @@
 
 #Faire une demande pour les XButton et quelle fonction ca va lancer
 
-# Exo que des portes and et or
-
-#windowMode a modifier
+#Exo que des portes and et or
 
 import sys, math
 from PyQt5 import QtGui, QtWidgets
@@ -55,7 +53,7 @@ def main() :
 #-coefElement >= 2 et coefElement pair et c'est lisible quand c'est >=6
     coefElement = 10
     
-#element choisit par l'utilisateur    
+#element choisit par l'utilisateur
     userElement = 0
     userRotation = math.pi*2
     
@@ -74,20 +72,21 @@ def main() :
     canvasExample = QRect((L/2)-(L/14), (H*8/9)-(H/14), L/7, H/7) 
   
 #initialisation des Button du Home Menu et du mode de creation avec un tableau
-    homeButton = {}
-    editorButton = {}
 
-    elementOnCanvas = {}
-    elementOnCanvas[0] = 0
+    homeButton = []
+    #init homeButton
+    for n in range(4):
+        homeButton.append(n)
     
-    elementOnCanvasPos = {}
-    elementOnCanvasPos[0] = 0
+    editorButton = []
+    for n in range(7):
+        editorButton.append(n)
+
+    elementOnCanvas = [0]
+    elementOnCanvasPos = [0]
+    elementOnCanvasRotation = [0]
     
-    elementOnCanvasRotation = {}
-    elementOnCanvasRotation[0] = 0
-    
-    lineOnCanvas = {}
-    lineOnCanvas[0] = 0
+    lineOnCanvas = [0]
 #-----------------------------------------------------------     
 #-----------------------------------------------------------     
 #class des differents evenement de mainWindow
@@ -105,7 +104,7 @@ def main() :
             
             if cursorLockMode and canvas.contains(cursorPos):
                 cursorPos = QPoint(round(cursorPos.x(), -1), round(cursorPos.y(), -1))
-                
+           
             self.update()
 #-----------------------------------------------------------            
          def keyPressEvent(self, event):
@@ -117,6 +116,7 @@ def main() :
             if event.key() == Qt.Key_Z and isControlPressed:
                 deleteLastElement()
             
+
             self.update()
             
          def keyReleaseEvent(self, event):
@@ -129,6 +129,7 @@ def main() :
             nonlocal clickCanvas, initClick, cursorPos, clickPos, intWindowMode
             nonlocal startLinePos, lineMode, rightClickCanvas
 
+            
             if event.button() == Qt.RightButton and canvas.contains(cursorPos) and not intWindowMode == 0:
                 rightClickCanvas = True
                 clickCanvas = False
@@ -232,9 +233,16 @@ def main() :
                         clickCanvas = False
                     
                     else :
-                        elementOnCanvas[len(elementOnCanvas)] = userElement
-                        elementOnCanvasPos[len(elementOnCanvasPos)] = clickPos
-                        elementOnCanvasRotation[len(elementOnCanvasRotation)] = userRotation
+                        
+                        elementOnCanvas.append(len(elementOnCanvas))
+                        elementOnCanvas[len(elementOnCanvas)-1] = userElement
+                                        
+                        elementOnCanvasPos.append(len(elementOnCanvasPos))
+                        elementOnCanvasPos[len(elementOnCanvasPos)-1] = clickPos
+                                  
+                        elementOnCanvasRotation.append(len(elementOnCanvasRotation))
+                        elementOnCanvasRotation[len(elementOnCanvasRotation)-1] = userRotation
+                                                
                         clickCanvas = False
                         
                 elif rightClickCanvas:
@@ -280,6 +288,7 @@ def main() :
                 painter.drawLine(startLinePos.x(), startLinePos.y(), cursorPos.x(), cursorPos.y())
                 
                 if initClick and not rightClickCanvas:
+                    
                     if lineOnCanvas[0] == 0:
                         lineOnCanvas[0] = QLine(startLinePos.x(), startLinePos.y(), cursorPos.x(), cursorPos.y())
                         clickCanvas = True
@@ -287,7 +296,8 @@ def main() :
                         startLinePos = cursorPos
 
                     else :
-                        lineOnCanvas[len(lineOnCanvas)] = QLine(startLinePos.x(), startLinePos.y(), cursorPos.x(), cursorPos.y())
+                        lineOnCanvas.append(len(lineOnCanvas))
+                        lineOnCanvas[len(lineOnCanvas)-1] = QLine(startLinePos.x(), startLinePos.y(), cursorPos.x(), cursorPos.y())
                         clickCanvas = True
                         initClick = False
                         startLinePos = cursorPos
@@ -310,6 +320,8 @@ def main() :
             del lineOnCanvas[len(lineOnCanvas)-1]
                      
             if len(lineOnCanvas) == 0:
+                
+                lineOnCanvas.append(len(lineOnCanvas))
                 lineOnCanvas[0] = 0
         else:
             del elementOnCanvasRotation[len(elementOnCanvasRotation)-1]
@@ -317,8 +329,13 @@ def main() :
             del elementOnCanvas[len(elementOnCanvas)-1]
                      
             if len(elementOnCanvas) == 0:
+                elementOnCanvas.append(0)
                 elementOnCanvas[0] = 0
+
+                elementOnCanvasPos.append(0)
                 elementOnCanvasPos[0] = 0
+                
+                elementOnCanvasRotation.append(0)
                 elementOnCanvasRotation[0] = 0
 #-----------------------------------------------------------                
     def changeElement(event):
@@ -558,7 +575,7 @@ def main() :
         else :
             return math.degrees(startAngle-userRotation)*16
         
-    def createEllipse(x, y, largeur, hauteur): #faut faire la rotation sur le cercle en lui même donc la c'est faux
+    def createEllipse(x, y, largeur, hauteur):
         nonlocal clickPos, coefElement, userRotation
         
         cosPhi = round(math.cos(userRotation))
@@ -598,21 +615,15 @@ def main() :
         
         userRotation = math.pi*2
         
-        elementOnCanvas = {}
-        elementOnCanvas[0] = 0
-    
-        elementOnCanvasPos = {}
-        elementOnCanvasPos[0] = 0
-    
-        elementOnCanvasRotation = {}
-        elementOnCanvasRotation[0] = 0
+        elementOnCanvas = [0]
+        elementOnCanvasPos = [0]
+        elementOnCanvasRotation = [0]
         
         cursorPos = QPoint()
         clickPos = QPoint()
         startLinePos = QPoint()
         
-        lineOnCanvas = {}
-        lineOnCanvas[0] = 0
+        lineOnCanvas = [0]
         
         rightClickCanvas = False
         clickCanvas = False
@@ -692,41 +703,51 @@ def main() :
             mainWindow.close()
             logoHomeMenu.show()
             
+            for n in range(len(homeButton)):
+                homeButton[n].show()
             for n in range(len(editorButton)):
                 editorButton[n].close()
-
-            homeButton[0] = createButton(10, (H*3/6), L-20, (H/6)-10, "Creation de schemas electriques", mainWindow, elecMode)
-            homeButton[1] = createButton(10, (H*4/6), L-20, (H/6)-10, "Creation de schemas logiques", mainWindow, logicMode)
-            homeButton[2] = createButton(10, (H*5/6), (L/2)-20, (H/6)-10, "Besoin d'aide ?", mainWindow, null)
-            homeButton[3] = createButton((L/2)+10, (H*5/6), (L/2)-20, (H/6)-10, "Fermer l'application", mainWindow, closeProg)
+                
         else :
             mainWindow.close()
             logoHomeMenu.close()
             
+            for n in range(len(editorButton)):
+                editorButton[n].show()
+            
             for n in range(len(homeButton)) :
                 homeButton[n].close()
-
-            editorButton[0] = createButton(10, (H*7/9), (L/4)-20, (H/8)-20, "Cable", mainWindow, changeLineMode)
-            editorButton[0].setCheckable(True)
-            
-            editorButton[1] = createButton((L*3/12), (H*7/9), (L/8)-20, (H/8)-20, "All angle", mainWindow, changeLinearMode)
-            editorButton[1].setCheckable(True)
-            
-            editorButton[2] = createButton(10, (H*8/9), (L/4)-20, (H/8)-20, "Tout suppimer", mainWindow, clearAll)
-            
-            editorButton[3] = createButton((L*3/4)+10, (H*8/9), (L/4)-20, (H/8)-20, "Retour", mainWindow, returnHomeMenu)
-            
-            editorButton[4] = createButton((L*8/12)-10, (H*7/9), (L/8)-20, (H/8)-20, "cadriage", mainWindow,  changeCadriageMode) 
-            editorButton[4].setCheckable(True)
-            
-            editorButton[5] = createButton((L*3/4)+10, (H*7/9), (L/4)-20, (H/8)-20, "Rotation", mainWindow, addRotation)
- 
-            editorButton[6] = createButton((L*8/12)-10, (H*8/9), (L/8)-20, (H/8)-20, "All Position", mainWindow, changeCursorLock)
-            editorButton[6].setCheckable(True)
-            
+                
         mainWindow.show()
+    
+    def initButtons():
+        nonlocal L, H, homeButton, editorButton, mainWindow
+        
+        homeButton[0] = createButton(10, (H*3/6), L-20, (H/6)-10, "Creation de schemas electriques", mainWindow, elecMode)
+        homeButton[1] = createButton(10, (H*4/6), L-20, (H/6)-10, "Creation de schemas logiques", mainWindow, logicMode)
+        homeButton[2] = createButton(10, (H*5/6), (L/2)-20, (H/6)-10, "Besoin d'aide ?", mainWindow, null)
+        homeButton[3] = createButton((L/2)+10, (H*5/6), (L/2)-20, (H/6)-10, "Fermer l'application", mainWindow, closeProg)
+        
+        editorButton[0] = createButton(10, (H*7/9), (L/4)-20, (H/8)-20, "Cable", mainWindow, changeLineMode)
+        editorButton[0].setCheckable(True)
+            
+        editorButton[1] = createButton((L*3/12), (H*7/9), (L/8)-20, (H/8)-20, "All angle", mainWindow, changeLinearMode)
+        editorButton[1].setCheckable(True)
+            
+        editorButton[2] = createButton(10, (H*8/9), (L/4)-20, (H/8)-20, "Tout suppimer", mainWindow, clearAll)
+            
+        editorButton[3] = createButton((L*3/4)+10, (H*8/9), (L/4)-20, (H/8)-20, "Retour", mainWindow, returnHomeMenu)
+            
+        editorButton[4] = createButton((L*8/12)-10, (H*7/9), (L/8)-20, (H/8)-20, "cadriage", mainWindow,  changeCadriageMode) 
+        editorButton[4].setCheckable(True)
+            
+        editorButton[5] = createButton((L*3/4)+10, (H*7/9), (L/4)-20, (H/8)-20, "Rotation", mainWindow, addRotation)
+ 
+        editorButton[6] = createButton((L*8/12)-10, (H*8/9), (L/8)-20, (H/8)-20, "All Position", mainWindow, changeCursorLock)
+        editorButton[6].setCheckable(True)
         
 #Initialisation du mainWindow et le place theoriquement en fonciton de de la resolution de l'ecran 
+
     app = QtWidgets.QApplication(sys.argv)    
 
     mainWindow = QtWidgets.QMainWindow()
@@ -747,6 +768,7 @@ def main() :
     
     mainWindow.setCentralWidget(windowEvent())
     
+    initButtons()
     windowMode(0)
 #-----------------------------------------------------------   
     mainWindow.show()
